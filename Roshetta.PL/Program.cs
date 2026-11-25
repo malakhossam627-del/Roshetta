@@ -1,9 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Rosetta.DAL.Data.Contexts;
-using Roshetta.BLL.Services.DataSeeder;
-using Roshetta.BLL.Services.Implementations;
-using Roshetta.BLL.Services.Interfaces;
-using Roshetta.PL.Services;
 
 namespace Roshetta.PL
 {
@@ -36,9 +32,6 @@ namespace Roshetta.PL
             });
 
             // Application Business Services (Task 3: Fady Maged - Cart, Checkout, Orders)
-            builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-            builder.Services.AddScoped<ICartService, CartService>();
-            builder.Services.AddScoped<IOrderService, OrderService>();
 
             var app = builder.Build();
 
@@ -48,7 +41,6 @@ namespace Roshetta.PL
                 using var scope = app.Services.CreateScope();
                 var dbContext = scope.ServiceProvider.GetRequiredService<RoshettaDbContext>();
                 dbContext.Database.EnsureCreated();
-                DemoDataSeeder.SeedAsync(dbContext).GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {

@@ -1,9 +1,5 @@
-@inject Roshetta.BLL.Services.Interfaces.ICartService CartService
-@inject Roshetta.BLL.Services.Interfaces.ICurrentUserService CurrentUserService
+@{ var userName = "Guest"; }
 @{
-    var userId = CurrentUserService.GetCurrentUserId();
-    var cartCount = await CartService.GetCartItemCountAsync(userId);
-    var userName = CurrentUserService.GetCurrentUserName();
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -67,7 +63,6 @@
                     <a asp-controller="Cart" asp-action="Index" class="cart-nav-btn" title="View Shopping Cart">
                         <i class="bi bi-bag"></i>
                         <span>Cart</span>
-                        <span id="navCartBadge" class="cart-badge-count">@cartCount</span>
                     </a>
 
                     <div class="dropdown">

@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Rosetta.DAL/Rosetta.DAL.csproj" Id="ce676127-5d79-4e2d-8451-e4549cb116a1" />
+  <Project Path="Roshetta.BLL/Roshetta.BLL.csproj" />
+  <Project Path="Roshetta.PL/Roshetta.PL.csproj" />
+</Solution>

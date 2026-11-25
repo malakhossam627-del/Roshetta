@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <UseRazorBuildServer>false</UseRazorBuildServer>
+    <UseSharedCompilation>false</UseSharedCompilation>
+    <RollForward>LatestMajor</RollForward>
+  </PropertyGroup>
+</Project>

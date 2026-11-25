@@ -1,0 +1,319 @@
+@model Roshetta.BLL.DTOs.CartDto
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<div class="container py-4">
+    <!-- Breadcrumb & Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1 small">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none" style="color: var(--primary-blue);">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page" style="color: var(--text-secondary);">Cart</li>
+                </ol>
+            </nav>
+            <h1 class="h3 fw-bold mb-0" style="color: var(--dark-navy);">
+                Shopping Cart
+                @if (!Model.IsEmpty)
+                {
+                    <span class="badge rounded-pill ms-2" style="background-color: var(--primary-blue-subtle); color: var(--primary-blue); font-size: 0.85rem;">@Model.TotalItemsCount @(Model.TotalItemsCount == 1 ? "item" : "items")</span>
+                }
+            </h1>
+        </div>
+
+        @if (!Model.IsEmpty)
+        {
+            <form asp-controller="Cart" asp-action="Clear" method="post" onsubmit="return confirm('Are you sure you want to clear your cart?');">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-rosetta-danger btn-sm">
+                    <i class="bi bi-trash3 me-1"></i> Clear Cart
+                </button>
+            </form>
+        }
+    </div>
+
+    @if (Model.IsEmpty)
+    {
+        <!-- Empty Cart State -->
+        <div class="empty-state-box">
+            <div class="empty-state-icon">
+                <i class="bi bi-cart-x"></i>
+            </div>
+            <h3 class="h4 fw-bold" style="color: var(--dark-navy);">Your cart is currently empty</h3>
+            <p class="text-secondary mx-auto mb-4" style="max-width: 460px;">
+                Explore our certified pharmacy catalog to add medications, supplements, and healthcare essentials to your cart.
+            </p>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-rosetta-primary px-4 py-2">
+                <i class="bi bi-search me-1"></i> Browse Catalog
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            <!-- Cart Items Section -->
+            <div class="col-lg-8">
+                <!-- Pharmacy Partner Badge -->
+                <div class="rosetta-card mb-3 p-3 d-flex align-items-center justify-content-between flex-wrap gap-2" style="background-color: var(--secondary-blue-subtle); border-color: rgba(77, 182, 217, 0.3);">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-hospital fs-5" style="color: var(--primary-blue);"></i>
+                        <div>
+                            <span class="small text-secondary d-block">Dispensed & fulfilled by:</span>
+                            <span class="fw-bold" style="color: var(--dark-navy);">@Model.PharmacyName</span>
+                        </div>
+                    </div>
+                    <span class="rosetta-badge" style="background-color: #fff; color: var(--primary-blue); border: 1px solid rgba(15, 107, 141, 0.2);">
+                        <i class="bi bi-shield-check text-success"></i> Licensed Partner
+                    </span>
+                </div>
+
+                @if (Model.HasRxItems)
+                {
+                    <!-- Rx Warning Notification -->
+                    <div class="alert alert-warning d-flex align-items-start gap-2 shadow-sm mb-3" style="border-radius: var(--radius-sm); border-color: #fde68a; background-color: #fefce8; color: #854d0e;" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill fs-5 flex-shrink-0 mt-1" style="color: #d97706;"></i>
+                        <div class="small">
+                            <strong>Prescription Required:</strong> Your cart includes prescription-only medication (Rx). In accordance with Egyptian Drug Authority regulations, a licensed pharmacist will verify the prescription details prior to final dispensing.
+                        </div>
+                    </div>
+                }
+
+                <!-- Items List Card -->
+                <div class="rosetta-card overflow-hidden">
+                    <div class="rosetta-card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0" id="cartTable">
+                                <thead style="background-color: var(--bg-app); border-bottom: 1px solid var(--border-color);">
+                                    <tr>
+                                        <th class="ps-4 py-3 text-secondary small fw-bold">PRODUCT</th>
+                                        <th class="py-3 text-secondary small fw-bold">PRICE</th>
+                                        <th class="py-3 text-secondary small fw-bold">QUANTITY</th>
+                                        <th class="py-3 text-secondary small fw-bold">TOTAL</th>
+                                        <th class="pe-4 py-3 text-end text-secondary small fw-bold">ACTION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Items)
+                                    {
+                                        <tr id="cartRow-@item.CartItemId" class="border-bottom border-light">
+                                            <td class="ps-4 py-3">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div class="rounded-3 d-flex align-items-center justify-content-center p-2 flex-shrink-0" style="width: 50px; height: 50px; background-color: var(--primary-blue-subtle);">
+                                                        <i class="bi bi-capsule fs-4" style="color: var(--primary-blue);"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="fw-bold mb-0" style="color: var(--dark-navy);">@item.ProductName</div>
+                                                        @if (!string.IsNullOrEmpty(item.BrandNameAr))
+                                                        {
+                                                            <div class="text-muted small">@item.BrandNameAr</div>
+                                                        }
+                                                        <div class="d-flex align-items-center gap-1 mt-1">
+                                                            @if (item.IsRx)
+                                                            {
+                                                                <span class="badge-rx">Rx REQUIRED</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="badge-otc">OTC</span>
+                                                            }
+                                                            @if (!string.IsNullOrEmpty(item.Strength))
+                                                            {
+                                                                <span class="text-secondary small ms-1">&bull; @item.Strength</span>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="py-3">
+                                                <span class="fw-semibold" style="color: var(--text-primary);">EGP @item.UnitPrice.ToString("N2")</span>
+                                            </td>
+                                            <td class="py-3">
+                                                <div class="quantity-picker">
+                                                    <button type="button" class="quantity-btn btn-qty-minus" data-id="@item.CartItemId" aria-label="Decrease quantity">
+                                                        <i class="bi bi-dash"></i>
+                                                    </button>
+                                                    <input type="number" class="quantity-input input-qty" id="qty-@item.CartItemId" data-id="@item.CartItemId" value="@item.Quantity" min="1" max="@item.AvailableStock" readonly />
+                                                    <button type="button" class="quantity-btn btn-qty-plus" data-id="@item.CartItemId" data-max="@item.AvailableStock" aria-label="Increase quantity">
+                                                        <i class="bi bi-plus"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="text-muted small mt-1" style="font-size: 0.75rem;">@item.AvailableStock in stock</div>
+                                            </td>
+                                            <td class="py-3">
+                                                <span class="fw-bold fs-6" style="color: var(--primary-blue);" id="lineTotal-@item.CartItemId">
+                                                    EGP @item.LineTotal.ToString("N2")
+                                                </span>
+                                            </td>
+                                            <td class="pe-4 py-3 text-end">
+                                                <form asp-controller="Cart" asp-action="Remove" method="post" class="d-inline">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="cartItemId" value="@item.CartItemId" />
+                                                    <button type="submit" class="btn btn-link text-danger p-0 shadow-none" title="Remove item">
+                                                        <i class="bi bi-trash fs-5"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-rosetta-outline">
+                        <i class="bi bi-arrow-left me-1"></i> Continue Shopping
+                    </a>
+                </div>
+            </div>
+
+            <!-- Order Summary Section -->
+            <div class="col-lg-4">
+                <div class="order-summary-box">
+                    <h2 class="h5 fw-bold mb-3" style="color: var(--dark-navy);">Order Summary</h2>
+
+                    <!-- Free Delivery Progress Bar -->
+                    @if (Model.Subtotal < 200m)
+                    {
+                        var remaining = 200m - Model.Subtotal;
+                        var percent = Math.Min(100, (int)((Model.Subtotal / 200m) * 100));
+                        <div class="p-3 mb-3 rounded-3" style="background-color: var(--primary-blue-subtle); border: 1px dashed var(--secondary-blue);">
+                            <div class="d-flex align-items-center gap-2 small mb-1 fw-semibold" style="color: var(--primary-blue);">
+                                <i class="bi bi-truck"></i>
+                                <span>Add <strong>EGP @remaining.ToString("N2")</strong> more for <strong>FREE Delivery!</strong></span>
+                            </div>
+                            <div class="progress" style="height: 6px; background-color: #cbd5e1;">
+                                <div class="progress-bar" role="progressbar" style="width: @percent%; background-color: var(--primary-blue);" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-2 mb-3 rounded-3 d-flex align-items-center gap-2 small fw-semibold" style="background-color: var(--soft-green); color: #166534;">
+                            <i class="bi bi-check-circle-fill" style="color: var(--success-green);"></i>
+                            <span>You unlocked <strong>FREE Delivery</strong> for this order!</span>
+                        </div>
+                    }
+
+                    <div class="summary-row">
+                        <span>Items Subtotal</span>
+                        <span class="fw-semibold text-dark" id="summarySubtotal">EGP @Model.Subtotal.ToString("N2")</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Estimated Delivery</span>
+                        <span class="fw-semibold" id="summaryDeliveryFee">
+                            @if (Model.DeliveryFee == 0)
+                            {
+                                <span class="text-success fw-bold">FREE</span>
+                            }
+                            else
+                            {
+                                <span>EGP @Model.DeliveryFee.ToString("N2")</span>
+                            }
+                        </span>
+                    </div>
+
+                    <div class="summary-row total-row">
+                        <span>Total Due</span>
+                        <span id="summaryTotal">EGP @Model.Total.ToString("N2")</span>
+                    </div>
+
+                    <div class="mt-4">
+                        <a asp-controller="Checkout" asp-action="Index" class="btn btn-rosetta-primary w-100 py-3 fs-6">
+                            Proceed to Checkout <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+
+                    <!-- Trust & Guarantee Badges -->
+                    <div class="mt-4 pt-3 border-top border-light">
+                        <div class="d-flex align-items-center gap-2 small text-secondary mb-2">
+                            <i class="bi bi-check2-circle text-success fs-5"></i>
+                            <span>100% Authentic Medications from Licensed Pharmacies</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 small text-secondary mb-2">
+                            <i class="bi bi-cash-coin text-primary fs-5" style="color: var(--primary-blue) !important;"></i>
+                            <span>Cash on Delivery (COD) Available</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 small text-secondary">
+                            <i class="bi bi-shield-lock text-primary fs-5" style="color: var(--primary-blue) !important;"></i>
+                            <span>Secure & Privacy Protected Healthcare Orders</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Plus quantity
+            $('.btn-qty-plus').click(function() {
+                var btn = $(this);
+                var id = btn.data('id');
+                var max = parseInt(btn.data('max')) || 999;
+                var input = $('#qty-' + id);
+                var currentVal = parseInt(input.val()) || 1;
+
+                if (currentVal < max) {
+                    var newVal = currentVal + 1;
+                    updateCartQuantity(id, newVal);
+                } else {
+                    alert('Maximum available stock is ' + max);
+                }
+            });
+
+            // Minus quantity
+            $('.btn-qty-minus').click(function() {
+                var btn = $(this);
+                var id = btn.data('id');
+                var input = $('#qty-' + id);
+                var currentVal = parseInt(input.val()) || 1;
+
+                if (currentVal > 1) {
+                    var newVal = currentVal - 1;
+                    updateCartQuantity(id, newVal);
+                }
+            });
+
+            function updateCartQuantity(cartItemId, newQty) {
+                $.ajax({
+                    url: '/Cart/UpdateQuantity',
+                    type: 'POST',
+                    data: {
+                        cartItemId: cartItemId,
+                        quantity: newQty
+                    },
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').first().val()
+                    },
+                    success: function(res) {
+                        if (res.success) {
+                            $('#qty-' + cartItemId).val(newQty);
+                            $('#lineTotal-' + cartItemId).text('EGP ' + res.itemLineTotal);
+                            $('#summarySubtotal').text('EGP ' + res.subtotal);
+                            $('#summaryTotal').text('EGP ' + res.total);
+                            if (parseFloat(res.deliveryFee) === 0) {
+                                $('#summaryDeliveryFee').html('<span class="text-success fw-bold">FREE</span>');
+                            } else {
+                                $('#summaryDeliveryFee').text('EGP ' + res.deliveryFee);
+                            }
+                            if (res.cartCount !== undefined) {
+                                $('#navCartBadge').text(res.cartCount);
+                            }
+                        } else {
+                            alert(res.message);
+                        }
+                    },
+                    error: function() {
+                        window.location.reload();
+                    }
+                });
+            }
+        });
+    </script>
+}

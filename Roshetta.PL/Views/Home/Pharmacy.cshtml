@@ -1,0 +1,175 @@
+@model List<Rosetta.DAL.Entites.Pharmacy.Inventory>
+@{
+    ViewData["Title"] = "Our Medicines - Pharmacy";
+    var activeCategory = ViewBag.ActiveCategory as string ?? "All";
+}
+
+<div>
+    <!-- Section Header (Wireframe - 4) -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1 class="h3 fw-bold mb-1" style="color: var(--dark-navy);">Our Medicines</h1>
+            <p class="text-secondary small mb-0">Browse and order authentic medications from licensed central pharmacies.</p>
+        </div>
+        <a asp-controller="Cart" asp-action="Index" class="btn btn-rosetta-secondary btn-sm">
+            <i class="bi bi-bag-check me-1"></i> View Cart
+        </a>
+    </div>
+
+    <!-- Category Filter Pills (Wireframe - 4) -->
+    <div class="medicine-category-pills">
+        <a asp-action="Pharmacy" asp-route-category="All" class="category-pill @(activeCategory == "All" ? "active" : "")">All</a>
+        <a asp-action="Pharmacy" asp-route-category="Pain Relief" class="category-pill @(activeCategory == "Pain Relief" ? "active" : "")">Pain Relief</a>
+        <a asp-action="Pharmacy" asp-route-category="Digestive" class="category-pill @(activeCategory == "Digestive" ? "active" : "")">Digestive</a>
+        <a asp-action="Pharmacy" asp-route-category="Antibiotics" class="category-pill @(activeCategory == "Antibiotics" ? "active" : "")">Antibiotics</a>
+        <a asp-action="Pharmacy" asp-route-category="Heart Health" class="category-pill @(activeCategory == "Heart Health" ? "active" : "")">Heart Health</a>
+        <a asp-action="Pharmacy" asp-route-category="Supplements" class="category-pill @(activeCategory == "Supplements" ? "active" : "")">Supplements</a>
+    </div>
+
+    <!-- Product Cards Grid (Wireframe - 4) -->
+    <div class="row g-4 mb-4">
+        @foreach (var item in Model)
+        {
+            var isRx = string.Equals(item.Product.Medicine.PrescriptionType, "Rx", StringComparison.OrdinalIgnoreCase);
+            var isPanadol = item.Product.BrandNameEn?.Contains("Panadol") == true;
+            var isOmega = item.Product.BrandNameEn?.Contains("Limitless") == true;
+            var isConcor = item.Product.BrandNameEn?.Contains("Concor") == true;
+
+            <div class="col-md-6 col-lg-4">
+                <div class="medicine-card">
+                    <!-- Medication Package Graphic (Wireframe - 4 style) -->
+                    <div class="medicine-img-container">
+                        @if (isPanadol)
+                        {
+                            <!-- Blue Panadol Box -->
+                            <div class="medicine-box-graphic" style="background: linear-gradient(145deg, #0b4f8a 0%, #1a73e8 100%);">
+                                <span class="badge bg-warning text-dark text-start" style="font-size: 0.6rem; width: fit-content;">ADVANCE</span>
+                                <div class="my-auto">
+                                    <div style="font-size: 0.95rem; font-weight: 800; letter-spacing: 0.5px;">Panadol</div>
+                                    <div style="font-size: 0.65rem; opacity: 0.9;">500mg Paracetamol</div>
+                                </div>
+                                <div style="font-size: 0.6rem; opacity: 0.85;">24 Film-Coated</div>
+                            </div>
+                        }
+                        else if (isOmega)
+                        {
+                            <!-- Pink / Magenta Limitless Bottle -->
+                            <div class="medicine-box-graphic" style="background: linear-gradient(145deg, #c026d3 0%, #db2777 100%); border-radius: 14px;">
+                                <span class="badge bg-white text-dark text-start" style="font-size: 0.6rem; width: fit-content;">OMEGA 3</span>
+                                <div class="my-auto">
+                                    <div style="font-size: 0.85rem; font-weight: 800;">LIMITLESS</div>
+                                    <div style="font-size: 0.6rem; opacity: 0.9;">Fish Oil + DHA</div>
+                                </div>
+                                <div style="font-size: 0.6rem; opacity: 0.85;">30 Softgels</div>
+                            </div>
+                        }
+                        else if (isConcor)
+                        {
+                            <!-- Heart / Concor Box -->
+                            <div class="medicine-box-graphic" style="background: linear-gradient(145deg, #0284c7 0%, #06b6d4 100%);">
+                                <span class="badge bg-danger text-white text-start" style="font-size: 0.6rem; width: fit-content;">Rx ONLY</span>
+                                <div class="my-auto">
+                                    <div style="font-size: 0.95rem; font-weight: 800;">Concor</div>
+                                    <div style="font-size: 0.65rem; opacity: 0.9;">5mg Bisoprolol</div>
+                                </div>
+                                <div style="font-size: 0.6rem; opacity: 0.85;">30 Tablets</div>
+                            </div>
+                        }
+                        else
+                        {
+                            <!-- Green/White Box -->
+                            <div class="medicine-box-graphic" style="background: linear-gradient(145deg, #059669 0%, #10b981 100%);">
+                                <span class="badge bg-white text-dark text-start" style="font-size: 0.6rem; width: fit-content;">@(item.Product.Medicine.PrescriptionType)</span>
+                                <div class="my-auto">
+                                    <div style="font-size: 0.85rem; font-weight: 800;">@(item.Product.BrandNameEn?.Split(' ')[0] ?? "ROSHETTA")</div>
+                                    <div style="font-size: 0.6rem; opacity: 0.9;">@item.Product.Strength</div>
+                                </div>
+                                <div style="font-size: 0.6rem; opacity: 0.85;">@item.Product.PackSize</div>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Product Information -->
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="badge @(isRx ? "badge-rx" : "badge-otc")">
+                                @(isRx ? "Prescription (Rx)" : "OTC Medicine")
+                            </span>
+                            <span class="text-muted small">@item.StockQuantity in stock</span>
+                        </div>
+
+                        <h2 class="medicine-card-title">
+                            @(item.Product.BrandNameEn ?? item.Product.Medicine.NameEn)
+                        </h2>
+                        @if (!string.IsNullOrEmpty(item.Product.BrandNameAr) || !string.IsNullOrEmpty(item.Product.Medicine.NameAr))
+                        {
+                            <div class="medicine-card-sub">@(item.Product.BrandNameAr ?? item.Product.Medicine.NameAr)</div>
+                        }
+
+                        <p class="small text-secondary mb-3" style="font-size: 0.85rem; line-height: 1.5;">
+                            @item.Product.Medicine.IntendedUse
+                        </p>
+                    </div>
+
+                    <!-- Price & Add to Cart (Wireframe - 4) -->
+                    <div class="pt-3 border-top border-light mt-auto">
+                        <div class="d-flex align-items-baseline justify-content-between mb-2">
+                            <span class="text-secondary small">Unit Price:</span>
+                            <span class="medicine-price">
+                                EGP @item.UnitPrice.ToString("N2")
+                            </span>
+                        </div>
+
+                        <form asp-controller="Cart" asp-action="Add" method="post" class="add-to-cart-form">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="inventoryId" value="@item.InventoryId" />
+                            <input type="hidden" name="quantity" value="1" />
+                            <button type="submit" class="btn-add-cart-green">
+                                <i class="bi bi-cart-plus me-1"></i> Add to cart
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Carousel Pagination Dots (Wireframe - 4) -->
+    <div class="d-flex justify-content-center align-items-center gap-2 my-4">
+        <span class="rounded-circle d-inline-block" style="width: 8px; height: 8px; background-color: var(--primary-blue);"></span>
+        <span class="rounded-circle d-inline-block" style="width: 8px; height: 8px; background-color: var(--border-color);"></span>
+        <span class="rounded-circle d-inline-block" style="width: 8px; height: 8px; background-color: var(--border-color);"></span>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.add-to-cart-form').on('submit', function(e) {
+                e.preventDefault();
+                var form = $(this);
+                var btn = form.find('button[type="submit"]');
+                var originalHtml = btn.html();
+
+                btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status"></span> Adding...');
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function(res) {
+                        btn.prop('disabled', false).html('<i class="bi bi-check2 me-1"></i> Added!');
+                        setTimeout(function() {
+                            btn.html(originalHtml);
+                        }, 2000);
+                        refreshCartBadge();
+                    },
+                    error: function() {
+                        btn.prop('disabled', false).html(originalHtml);
+                        form.off('submit').submit();
+                    }
+                });
+            });
+        });
+    </script>
+}

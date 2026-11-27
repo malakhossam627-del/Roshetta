@@ -4,6 +4,8 @@
     var userId = CurrentUserService.GetCurrentUserId();
     var cartCount = await CartService.GetCartItemCountAsync(userId);
     var userName = CurrentUserService.GetCurrentUserName();
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -25,61 +27,117 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
-    <!-- Top Navigation Bar -->
-    <nav class="navbar navbar-expand-lg rosetta-navbar">
-        <div class="container">
-            <!-- Brand Logo with Grand Hotel Font -->
-            <a class="brand-logo-text" asp-area="" asp-controller="Home" asp-action="Index">
-                <span class="d-inline-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded-circle p-1" style="width: 38px; height: 38px; background-color: var(--primary-blue-subtle) !important;">
-                    <i class="bi bi-capsule" style="color: var(--primary-blue); font-size: 1.25rem;"></i>
-                </span>
-                <span>Roshetta</span>
-            </a>
+    <div class="rosetta-app-wrapper">
+        <!-- Backdrop for mobile drawer -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
-            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#rosettaNavbar" aria-controls="rosettaNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="bi bi-list fs-2 text-dark"></i>
-            </button>
+        <!-- Left Dark Navy Sidebar (Wireframes 3, 4, 5) -->
+        <aside class="rosetta-sidebar" id="rosettaSidebar">
+            <!-- Sidebar Header / Logo -->
+            <div class="sidebar-header">
+                <a asp-controller="Home" asp-action="Index" class="d-flex flex-column align-items-center text-decoration-none">
+                    <div class="sidebar-logo-emblem">R</div>
+                    <span class="sidebar-brand-text">Roshetta</span>
+                </a>
+            </div>
 
-            <div class="collapse navbar-collapse" id="rosettaNavbar">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 gap-1">
-                    <li class="nav-item">
-                        <a class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">
-                            <i class="bi bi-grid-fill"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "Cart" ? "active" : "")" asp-controller="Cart" asp-action="Index">
-                            <i class="bi bi-cart3"></i>
-                            <span>My Cart</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "Orders" ? "active" : "")" asp-controller="Orders" asp-action="Index">
-                            <i class="bi bi-clock-history"></i>
-                            <span>Orders & History</span>
-                        </a>
-                    </li>
-                </ul>
-
-                <!-- Right Actions: Cart Badge & Customer Profile -->
-                <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
-                    <a asp-controller="Cart" asp-action="Index" class="cart-nav-btn" title="View Shopping Cart">
+            <!-- Navigation Links -->
+            <ul class="sidebar-nav">
+                <li>
+                    <a asp-controller="Home" asp-action="Index" class="sidebar-link @(currentController == "Home" && currentAction == "Index" ? "active" : "")">
+                        <i class="bi bi-grid"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Home" asp-action="Pharmacy" class="sidebar-link @(currentController == "Home" && currentAction == "Pharmacy" ? "active" : "")">
                         <i class="bi bi-bag"></i>
-                        <span>Cart</span>
-                        <span id="navCartBadge" class="cart-badge-count">@cartCount</span>
+                        <span>Pharmacy</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Home" asp-action="Medications" class="sidebar-link @(currentController == "Home" && currentAction == "Medications" ? "active" : "")">
+                        <i class="bi bi-file-earmark-plus"></i>
+                        <span>My Medications</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Orders" asp-action="Index" class="sidebar-link @(currentController == "Orders" ? "active" : "")">
+                        <i class="bi bi-cart3"></i>
+                        <span>Orders</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Cart" asp-action="Index" class="sidebar-link @(currentController == "Cart" ? "active" : "")">
+                        <i class="bi bi-bag-check"></i>
+                        <span>My Cart</span>
+                        <span id="sidebarCartBadge" class="sidebar-badge" style="@(cartCount > 0 ? "" : "display:none;")">@cartCount</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" onclick="alert('AI Assistant: Roshetta intelligent medicine advisory system.');" class="sidebar-link">
+                        <i class="bi bi-soundwave"></i>
+                        <span>AI Assistant</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" onclick="alert('Profile: Nourhan Gamal (Customer Account)');" class="sidebar-link">
+                        <i class="bi bi-person"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Sidebar Footer / Logout -->
+            <div class="sidebar-footer">
+                <a asp-controller="Home" asp-action="Landing" class="sidebar-logout-btn" title="Logout / View Landing Page">
+                    <i class="bi bi-box-arrow-left"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Right Main Content Area -->
+        <div class="rosetta-main-content">
+            <!-- Top Header Bar -->
+            <header class="rosetta-topbar">
+                <!-- Mobile Sidebar Toggle -->
+                <button class="btn btn-link text-dark p-0 d-lg-none shadow-none me-2" type="button" id="sidebarToggle" aria-label="Toggle Navigation">
+                    <i class="bi bi-list fs-2" style="color: var(--dark-navy);"></i>
+                </button>
+
+                <!-- Search Input Bar with dual magnifier icons matching Image 1 -->
+                <div class="topbar-search-box">
+                    <i class="bi bi-search search-icon-left"></i>
+                    <input type="text" class="topbar-search-input" placeholder="Search medicines..." id="topSearchInput" />
+                    <i class="bi bi-search search-icon-right"></i>
+                </div>
+
+                <!-- Topbar Actions -->
+                <div class="topbar-actions">
+                    <!-- Notification Bell -->
+                    <a href="javascript:void(0);" class="topbar-bell-btn" title="Notifications" onclick="alert('No unread notifications');">
+                        <i class="bi bi-bell"></i>
                     </a>
 
+                    <!-- Cart Shortcut -->
+                    <a asp-controller="Cart" asp-action="Index" class="topbar-bell-btn position-relative" title="Shopping Cart">
+                        <i class="bi bi-cart3"></i>
+                        <span id="navCartBadge" class="sidebar-badge" style="position: absolute; top: -6px; right: -8px; @(cartCount > 0 ? "" : "display:none;")">@cartCount</span>
+                    </a>
+
+                    <!-- User Profile Dropdown matching Image 1 -->
                     <div class="dropdown">
-                        <button class="btn user-nav-pill dropdown-toggle shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <div class="user-avatar-circle">
-                                @(userName.Length > 0 ? userName.Substring(0, 1).ToUpper() : "U")
+                        <div class="topbar-user-badge dropdown-toggle shadow-none" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="topbar-avatar-purple">
+                                <i class="bi bi-person-fill"></i>
                             </div>
-                            <span class="d-none d-sm-inline">@userName</span>
-                        </button>
+                            <span class="topbar-user-name d-none d-sm-inline">@userName</span>
+                            <i class="bi bi-chevron-down ms-1" style="font-size: 0.8rem; color: var(--dark-navy);"></i>
+                        </div>
                         <ul class="dropdown-menu dropdown-menu-end shadow-sm border-light" style="border-radius: var(--radius-sm);">
                             <li class="px-3 py-2 border-bottom">
-                                <div class="fw-bold">@userName</div>
+                                <div class="fw-bold" style="color: var(--dark-navy);">@userName</div>
                                 <div class="text-muted small">Customer Account</div>
                             </li>
                             <li>
@@ -89,61 +147,45 @@
                             </li>
                             <li>
                                 <a class="dropdown-item py-2" asp-controller="Cart" asp-action="Index">
-                                    <i class="bi bi-cart-check me-2 text-success"></i>Active Cart
+                                    <i class="bi bi-cart-check me-2 text-success"></i>My Cart
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2" asp-controller="Home" asp-action="Landing">
+                                    <i class="bi bi-house me-2 text-secondary"></i>Landing Page
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
-            </div>
-        </div>
-    </nav>
+            </header>
 
-    <!-- Flash Messages (Toasts / Alerts) -->
-    <div class="container mt-3">
-        @if (TempData["SuccessMessage"] != null)
-        {
-            <div class="alert alert-success alert-dismissible fade show d-flex align-items-center shadow-sm" style="border-radius: var(--radius-sm); border-color: var(--success-green); background-color: var(--soft-green); color: #166534;" role="alert">
-                <i class="bi bi-check-circle-fill fs-5 me-2" style="color: var(--success-green);"></i>
-                <div class="fw-semibold">@TempData["SuccessMessage"]</div>
-                <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        }
-        @if (TempData["ErrorMessage"] != null)
-        {
-            <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center shadow-sm" style="border-radius: var(--radius-sm); border-color: #fca5a5; background-color: var(--soft-red); color: var(--critical-red);" role="alert">
-                <i class="bi bi-exclamation-triangle-fill fs-5 me-2"></i>
-                <div class="fw-semibold">@TempData["ErrorMessage"]</div>
-                <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        }
-    </div>
-
-    <!-- Main Content Body -->
-    <main role="main" class="pb-5">
-        @RenderBody()
-    </main>
-
-    <!-- Footer -->
-    <footer class="rosetta-footer">
-        <div class="container">
-            <div class="row g-4 align-items-center">
-                <div class="col-md-6">
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <span class="brand-logo-text fs-3">Roshetta</span>
-                        <span class="brand-badge">DEPI Final Project</span>
+            <!-- Flash Messages (Toasts / Alerts) -->
+            <div class="px-4 pt-3">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center shadow-sm" style="border-radius: var(--radius-sm); border-color: var(--success-green); background-color: var(--soft-green); color: #166534;" role="alert">
+                        <i class="bi bi-check-circle-fill fs-5 me-2" style="color: var(--success-green);"></i>
+                        <div class="fw-semibold">@TempData["SuccessMessage"]</div>
+                        <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    <p class="text-secondary small mb-0">
-                        Smart Online Pharmacy & Medication Management Platform. Designed for Egyptian users with licensed pharmacy oversight.
-                    </p>
-                </div>
-                <div class="col-md-6 text-md-end text-secondary small">
-                    <div>Module 3: Cart, Checkout & Customer Orders &bull; Fady Maged</div>
-                    <div class="mt-1 text-muted">&copy; 2026 Roshetta Platform. Academic prototype with synthetic data.</div>
-                </div>
+                }
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center shadow-sm" style="border-radius: var(--radius-sm); border-color: #fca5a5; background-color: var(--soft-red); color: var(--critical-red);" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill fs-5 me-2"></i>
+                        <div class="fw-semibold">@TempData["ErrorMessage"]</div>
+                        <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
             </div>
+
+            <!-- Page Body -->
+            <main class="rosetta-page-body" role="main">
+                @RenderBody()
+            </main>
         </div>
-    </footer>
+    </div>
 
     <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -151,11 +193,21 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     <script>
+        // Mobile sidebar toggle
+        $('#sidebarToggle, #sidebarBackdrop').click(function() {
+            $('#rosettaSidebar').toggleClass('show');
+            $('#sidebarBackdrop').toggleClass('show');
+        });
+
         // Global helper to refresh cart badge asynchronously
         function refreshCartBadge() {
             $.get('/Cart/Count', function(data) {
                 if (data && typeof data.count !== 'undefined') {
-                    $('#navCartBadge').text(data.count);
+                    if (data.count > 0) {
+                        $('#navCartBadge, #sidebarCartBadge').text(data.count).show();
+                    } else {
+                        $('#navCartBadge, #sidebarCartBadge').hide();
+                    }
                 }
             });
         }

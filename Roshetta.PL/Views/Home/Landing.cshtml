@@ -1,0 +1,98 @@
+@model List<Rosetta.DAL.Entites.Pharmacy.Inventory>
+@{
+    ViewData["Title"] = "Welcome to Roshetta";
+}
+
+<div>
+    <!-- Hero Banner (Wireframe - 1) -->
+    <div class="rosetta-card mb-5 p-4 p-lg-5 position-relative overflow-hidden" style="background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%); color: #ffffff; border: none; border-radius: var(--radius-lg);">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <div class="d-inline-flex align-items-center gap-2 p-2 px-3 rounded-pill mb-3" style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px);">
+                    <i class="bi bi-shield-fill-check text-success"></i>
+                    <span class="small fw-semibold">Egyptian Drug Authority (EDA) Guidelines</span>
+                </div>
+
+                <div class="brand-logo-text text-white display-4 mb-1">Roshetta</div>
+
+                <h1 class="display-6 fw-bold mb-3 text-white">
+                    Smart Online Pharmacy & Medication Management
+                </h1>
+
+                <p class="fs-6 opacity-90 mb-4" style="max-width: 520px; line-height: 1.6;">
+                    Your trusted platform for safe, verified medication orders, prescription tracking, and reliable adherence support with licensed pharmacists.
+                </p>
+
+                <div class="d-flex flex-wrap gap-3">
+                    <a asp-action="Pharmacy" class="btn btn-rosetta-success py-2 px-4 shadow-sm fw-bold">
+                        <i class="bi bi-capsule me-1"></i> Browse Medicine
+                    </a>
+                    <a asp-action="Index" class="btn btn-outline-light py-2 px-4 fw-semibold" style="border-radius: var(--radius-sm);">
+                        Open Dashboard <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 3D Pill Bottle Graphic (Wireframe - 1 right side) -->
+            <div class="col-lg-5 text-center">
+                <div class="p-4 rounded-4 d-inline-block" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(12px);">
+                    <div style="font-size: 5rem; line-height: 1;" class="text-white mb-3">
+                        <i class="bi bi-prescription2"></i>
+                    </div>
+                    <div class="d-flex justify-content-center gap-2 mb-3">
+                        <span class="rounded-pill p-2 px-3 text-white small" style="background-color: var(--secondary-blue);">
+                            <i class="bi bi-shield-check me-1"></i> Verified
+                        </span>
+                        <span class="rounded-pill p-2 px-3 text-white small" style="background-color: var(--success-green);">
+                            <i class="bi bi-truck me-1"></i> Fast Delivery
+                        </span>
+                    </div>
+                    <div class="text-white-50 small">Licensed Egyptian Partner Pharmacies</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4 Feature Cards (Wireframe - 1 bottom) -->
+    <div class="row g-3 mb-5">
+        <div class="col-md-6 col-lg-3">
+            <div class="rosetta-card p-4 h-100 text-center">
+                <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px; background-color: var(--primary-blue-subtle); color: var(--primary-blue); font-size: 1.6rem;">
+                    <i class="bi bi-cart3"></i>
+                </div>
+                <h2 class="h6 fw-bold mb-2" style="color: var(--dark-navy);">Online Pharmacy</h2>
+                <p class="text-secondary small mb-0">Certified medicines with transparent pricing and cash on delivery.</p>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="rosetta-card p-4 h-100 text-center">
+                <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px; background-color: var(--secondary-blue-subtle); color: var(--secondary-blue); font-size: 1.6rem;">
+                    <i class="bi bi-bell-fill"></i>
+                </div>
+                <h2 class="h6 fw-bold mb-2" style="color: var(--dark-navy);">Medication Reminders</h2>
+                <p class="text-secondary small mb-0">Custom regimens and smart alerts so you never miss a dose.</p>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="rosetta-card p-4 h-100 text-center">
+                <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px; background-color: var(--soft-green); color: var(--success-green); font-size: 1.6rem;">
+                    <i class="bi bi-robot"></i>
+                </div>
+                <h2 class="h6 fw-bold mb-2" style="color: var(--dark-navy);">AI Assistant</h2>
+                <p class="text-secondary small mb-0">Instant, cited guidance on drug interactions and safety precautions.</p>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="rosetta-card p-4 h-100 text-center">
+                <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px; background-color: #fef3c7; color: #d97706; font-size: 1.6rem;">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <h2 class="h6 fw-bold mb-2" style="color: var(--dark-navy);">Safe & Reliable</h2>
+                <p class="text-secondary small mb-0">Every prescription order is verified by a licensed pharmacist.</p>
+            </div>
+        </div>
+    </div>
+</div>

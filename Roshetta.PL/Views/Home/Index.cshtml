@@ -1,173 +1,174 @@
 @model List<Rosetta.DAL.Entites.Pharmacy.Inventory>
 @{
-    ViewData["Title"] = "Smart Online Pharmacy & Medication Management";
+    ViewData["Title"] = "Dashboard";
+    var userName = ViewBag.UserName as string ?? "Nourhan Gamal";
+    var firstName = userName.Split(' ')[0];
 }
 
-<div class="container py-4">
-    <!-- Hero Banner (Wireframe 1) -->
-    <div class="rosetta-card mb-5 overflow-hidden position-relative" style="background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%); color: #fff; border: none; box-shadow: var(--shadow-lg);">
-        <div class="row align-items-center p-4 p-md-5">
-            <div class="col-lg-7">
-                <div class="d-inline-flex align-items-center gap-2 p-2 px-3 rounded-pill mb-3" style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px);">
-                    <i class="bi bi-shield-check" style="color: var(--secondary-blue);"></i>
-                    <span class="small fw-semibold">Egyptian Drug Authority (EDA) Compliant Standards</span>
-                </div>
-                <h1 class="display-5 fw-bold mb-3 text-white">
-                    Smart Online Pharmacy & Medication Management
-                </h1>
-                <p class="fs-6 opacity-90 mb-4" style="max-width: 520px; line-height: 1.6;">
-                    Your trusted platform for safe, verified medication orders, prescription tracking, and reliable adherence support with licensed pharmacists.
-                </p>
-                <div class="d-flex flex-wrap gap-3">
-                    <a href="#medicinesSection" class="btn btn-rosetta-success py-2 px-4 shadow-sm">
-                        <i class="bi bi-cart3 me-1"></i> Order Medicines
-                    </a>
-                    <a asp-controller="Orders" asp-action="Index" class="btn btn-outline-light py-2 px-4" style="border-radius: var(--radius-sm); font-weight: 600;">
-                        <i class="bi bi-clock-history me-1"></i> Track My Orders
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-5 d-none d-lg-flex justify-content-center">
-                <div class="text-center p-4 rounded-4" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(12px);">
-                    <div class="display-1 text-white mb-2">
-                        <i class="bi bi-capsule-pill"></i>
+<div class="container-fluid p-0">
+    <!-- Greeting Header matching Image 1 -->
+    <div class="mb-4">
+        <h1 class="fw-bold mb-1" style="color: var(--dark-navy); font-size: 2.15rem; letter-spacing: -0.02em;">
+            Hello, @firstName !
+        </h1>
+        <p class="mb-0" style="color: var(--text-secondary); font-size: 1.05rem; font-weight: 500;">
+            Take care of your health with Roshetta
+        </p>
+    </div>
+
+    <!-- 4 Stat Cards Row matching Image 1 -->
+    <div class="row g-3 g-xl-4 mb-4">
+        <!-- Card 1: Total Orders -->
+        <div class="col-6 col-md-3">
+            <a asp-controller="Orders" asp-action="Index" class="text-decoration-none d-block h-100">
+                <div class="stat-card-mockup">
+                    <div class="stat-circle-icon" style="background-color: #E0F2FE; color: #0284C7;">
+                        <i class="bi bi-cart3"></i>
                     </div>
-                    <div class="brand-logo-text text-white fs-1 mb-1">Roshetta</div>
-                    <div class="small text-white-50">Licensed Partner Pharmacy Network</div>
+                    <div class="stat-val-mockup">3</div>
+                    <div class="stat-label-mockup">Total Orders</div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Stat Cards (Wireframe 3) -->
-    <div class="row g-3 mb-5">
-        <div class="col-6 col-md-3">
-            <div class="rosetta-card p-3 d-flex align-items-center gap-3">
-                <div class="rounded-3 p-3 d-flex align-items-center justify-content-center" style="background-color: var(--primary-blue-subtle); color: var(--primary-blue); font-size: 1.5rem;">
-                    <i class="bi bi-truck"></i>
-                </div>
-                <div>
-                    <div class="fs-4 fw-bold" style="color: var(--dark-navy);">2</div>
-                    <div class="small text-secondary">Active Orders</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="rosetta-card p-3 d-flex align-items-center gap-3">
-                <div class="rounded-3 p-3 d-flex align-items-center justify-content-center" style="background-color: var(--soft-green); color: var(--success-green); font-size: 1.5rem;">
-                    <i class="bi bi-capsule"></i>
-                </div>
-                <div>
-                    <div class="fs-4 fw-bold" style="color: var(--dark-navy);">@Model.Count</div>
-                    <div class="small text-secondary">Medicines In Stock</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="rosetta-card p-3 d-flex align-items-center gap-3">
-                <div class="rounded-3 p-3 d-flex align-items-center justify-content-center" style="background-color: var(--secondary-blue-subtle); color: var(--secondary-blue); font-size: 1.5rem;">
-                    <i class="bi bi-heart-pulse"></i>
-                </div>
-                <div>
-                    <div class="fs-4 fw-bold" style="color: var(--dark-navy);">100%</div>
-                    <div class="small text-secondary">EDA Registered</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="rosetta-card p-3 d-flex align-items-center gap-3">
-                <div class="rounded-3 p-3 d-flex align-items-center justify-content-center" style="background-color: #fef3c7; color: #d97706; font-size: 1.5rem;">
-                    <i class="bi bi-star-fill"></i>
-                </div>
-                <div>
-                    <div class="fs-4 fw-bold" style="color: var(--dark-navy);">4.9 / 5</div>
-                    <div class="small text-secondary">Patient Rating</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Medicines Catalog Showcase (Wireframe 4) -->
-    <div id="medicinesSection">
-        <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-2">
-            <div>
-                <h2 class="h3 fw-bold mb-1" style="color: var(--dark-navy);">Our Medicines</h2>
-                <p class="text-secondary small mb-0">Order directly from our licensed central pharmacy partner with same-day delivery across Egypt.</p>
-            </div>
-            <a asp-controller="Cart" asp-action="Index" class="btn btn-rosetta-secondary btn-sm">
-                <i class="bi bi-bag-check me-1"></i> Go to Cart
             </a>
         </div>
 
-        <div class="row g-4">
-            @foreach (var item in Model)
+        <!-- Card 2: Active Plans -->
+        <div class="col-6 col-md-3">
+            <a asp-controller="Home" asp-action="Medications" class="text-decoration-none d-block h-100">
+                <div class="stat-card-mockup">
+                    <div class="stat-circle-icon" style="background-color: #E0F7FA; color: #0F6B8D;">
+                        <i class="bi bi-capsule"></i>
+                    </div>
+                    <div class="stat-val-mockup">2</div>
+                    <div class="stat-label-mockup">Active Plans</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Card 3: Adherence Rate -->
+        <div class="col-6 col-md-3">
+            <div class="stat-card-mockup">
+                <div class="stat-circle-icon" style="background-color: #DCFCE7; color: var(--success-green);">
+                    <i class="bi bi-check-lg"></i>
+                </div>
+                <div class="stat-val-mockup">95%</div>
+                <div class="stat-label-mockup">Adherence Rate</div>
+            </div>
+        </div>
+
+        <!-- Card 4: Your Rating -->
+        <div class="col-6 col-md-3">
+            <div class="stat-card-mockup">
+                <div class="stat-circle-icon" style="background-color: #FEF3C7; color: #F59E0B;">
+                    <i class="bi bi-star-fill"></i>
+                </div>
+                <div class="stat-val-mockup">4.5</div>
+                <div class="stat-label-mockup">Your Rating</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lower Section: Today's Medications (Left) & Your Health Our Priority (Right) -->
+    <div class="row g-4 mb-4">
+        <!-- Left Card: Today's Medications -->
+        <div class="col-lg-8">
+            <div class="medications-card-mockup">
+                <div class="medications-card-header">
+                    <h2 class="medications-card-title">Today's Medications</h2>
+                    <a asp-controller="Home" asp-action="Medications" class="medications-view-all">
+                        <span>View All</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Dose 1: Vitamin D (Taken) -->
+                <div class="med-item-row">
+                    <div>
+                        <div class="med-item-name">Vitamin D</div>
+                        <div class="med-item-meta">8:00 AM - 1 Tablet</div>
+                    </div>
+                    <div class="pill-toggle-taken" id="pillVitaminD">
+                        <span>Taken</span>
+                        <span class="circle-check-green">
+                            <i class="bi bi-check-lg"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Dose 2: Blood Pressure pill (Take) -->
+                <div class="med-item-row">
+                    <div>
+                        <div class="med-item-name">Blood Pressure pill</div>
+                        <div class="med-item-meta">8:00 AM - 1 Tablet</div>
+                    </div>
+                    <a href="javascript:void(0);" class="pill-toggle-take" id="pillBp" onclick="toggleDose(this)">
+                        <span>Take</span>
+                        <span class="circle-clock-blue">
+                            <i class="bi bi-clock"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Card: Your Health Our Priority -->
+        <div class="col-lg-4">
+            <div class="priority-card-mockup">
+                <h3 class="priority-card-title">
+                    Your Health<br>Our Priority
+                </h3>
+                <p class="priority-card-sub">
+                    Smart tools for a healthier life
+                </p>
+                <div>
+                    <a asp-controller="Home" asp-action="Pharmacy" class="btn btn-explore-gradient">
+                        Explore Features
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Access: Pharmacy & Order section for testing Task 3 (Fady Maged) -->
+    <div class="mt-4 pt-3">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <h3 class="h5 fw-bold mb-0" style="color: var(--dark-navy);">Quick Order from Pharmacy</h3>
+                <span class="text-secondary small">Add medicines directly to your cart & proceed to checkout</span>
+            </div>
+            <a asp-action="Pharmacy" class="btn btn-rosetta-outline btn-sm">
+                Full Pharmacy <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        <div class="row g-3">
+            @if (Model != null && Model.Any())
             {
-                var isRx = string.Equals(item.Product.Medicine.PrescriptionType, "Rx", StringComparison.OrdinalIgnoreCase);
-                <div class="col-md-6 col-lg-4">
-                    <div class="rosetta-card h-100 d-flex flex-column p-4">
-                        <!-- Card Header / Badges -->
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div class="rounded-3 p-3 d-flex align-items-center justify-content-center" style="width: 58px; height: 58px; background-color: var(--primary-blue-subtle); color: var(--primary-blue);">
-                                <i class="bi bi-capsule fs-3"></i>
-                            </div>
-                            <div>
-                                @if (isRx)
-                                {
-                                    <span class="badge-rx">Rx ONLY</span>
-                                }
-                                else
-                                {
-                                    <span class="badge-otc">OTC</span>
-                                }
-                            </div>
-                        </div>
-
-                        <!-- Product Title & Details -->
-                        <div class="flex-grow-1">
-                            <h3 class="h6 fw-bold mb-1" style="color: var(--dark-navy);">
-                                @(item.Product.BrandNameEn ?? item.Product.Medicine.NameEn)
-                            </h3>
-                            @if (!string.IsNullOrEmpty(item.Product.BrandNameAr) || !string.IsNullOrEmpty(item.Product.Medicine.NameAr))
-                            {
-                                <div class="text-muted small mb-2">@(item.Product.BrandNameAr ?? item.Product.Medicine.NameAr)</div>
-                            }
-
-                            <div class="d-flex align-items-center gap-2 small text-secondary mb-2">
-                                @if (!string.IsNullOrEmpty(item.Product.Strength))
-                                {
-                                    <span class="badge bg-light text-dark border">@item.Product.Strength</span>
-                                }
-                                @if (!string.IsNullOrEmpty(item.Product.PackSize))
-                                {
-                                    <span>@item.Product.PackSize</span>
-                                }
-                            </div>
-
-                            <p class="small text-secondary mb-3" style="line-height: 1.5;">
-                                @item.Product.Medicine.IntendedUse
-                            </p>
-                        </div>
-
-                        <!-- Price & Add to Cart Action -->
-                        <div class="pt-3 border-top border-light d-flex align-items-center justify-content-between mt-auto">
-                            <div>
-                                <span class="text-muted small d-block">Price:</span>
-                                <span class="fw-bold fs-5" style="color: var(--primary-blue);">
-                                    EGP @item.UnitPrice.ToString("N2")
+                foreach (var item in Model.Take(3))
+                {
+                    <div class="col-md-4">
+                        <div class="medicine-card p-3">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="badge @(item.Product.Medicine.PrescriptionType == "Rx" ? "badge-rx" : "badge-otc")">
+                                    @item.Product.Medicine.PrescriptionType
                                 </span>
+                                <span class="text-secondary small fw-bold">EGP @item.UnitPrice.ToString("N2")</span>
                             </div>
+                            <div class="fw-bold text-dark fs-6 mb-1">
+                                @(item.Product.BrandNameEn ?? item.Product.Medicine.NameEn)
+                            </div>
+                            <div class="text-muted small mb-3">@item.Product.Strength &bull; @item.Product.DosageForm</div>
 
-                            <form asp-controller="Cart" asp-action="Add" method="post" class="add-to-cart-form">
+                            <form asp-controller="Cart" asp-action="Add" method="post" class="mt-auto add-to-cart-form">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="inventoryId" value="@item.InventoryId" />
                                 <input type="hidden" name="quantity" value="1" />
-                                <button type="submit" class="btn btn-rosetta-primary btn-sm px-3">
-                                    <i class="bi bi-cart-plus me-1"></i> Add to Cart
+                                <button type="submit" class="btn-add-cart-green">
+                                    <i class="bi bi-cart-plus"></i> Add to Cart
                                 </button>
                             </form>
                         </div>
                     </div>
-                </div>
+                }
             }
         </div>
     </div>
@@ -175,6 +176,13 @@
 
 @section Scripts {
     <script>
+        function toggleDose(btn) {
+            var $btn = $(btn);
+            $btn.removeClass('pill-toggle-take').addClass('pill-toggle-taken');
+            $btn.html('<span>Taken</span><span class="circle-check-green"><i class="bi bi-check-lg"></i></span>');
+            $btn.removeAttr('onclick');
+        }
+
         $(document).ready(function() {
             $('.add-to-cart-form').on('submit', function(e) {
                 e.preventDefault();
@@ -182,30 +190,18 @@
                 var btn = form.find('button[type="submit"]');
                 var originalHtml = btn.html();
 
-                btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Adding...');
+                btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status"></span> Adding...');
 
                 $.ajax({
                     url: form.attr('action'),
                     type: 'POST',
                     data: form.serialize(),
                     success: function(res) {
-                        btn.prop('disabled', false).html('<i class="bi bi-check2 me-1"></i> Added!');
+                        btn.prop('disabled', false).html('<i class="bi bi-check2"></i> Added!');
                         setTimeout(function() {
                             btn.html(originalHtml);
                         }, 2000);
-
-                        if (res.cartCount !== undefined) {
-                            $('#navCartBadge').text(res.cartCount);
-                        }
-
-                        // Trigger toast or message
-                        if (res.message) {
-                            var alertHtml = '<div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert" style="border-radius: var(--radius-sm); border-color: var(--success-green); background-color: var(--soft-green); color: #166534;">' +
-                                '<i class="bi bi-check-circle-fill me-2" style="color: var(--success-green);"></i>' + res.message +
-                                '<button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>' +
-                                '</div>';
-                            $('main').prepend('<div class="container">' + alertHtml + '</div>');
-                        }
+                        refreshCartBadge();
                     },
                     error: function() {
                         btn.prop('disabled', false).html(originalHtml);
